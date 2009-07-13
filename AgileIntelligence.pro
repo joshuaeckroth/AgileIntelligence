@@ -13,9 +13,17 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     Pixel.cpp \
     LatLon.cpp \
-    Camera.cpp
+    Camera.cpp \
+    RenderArea.cpp \
+    ProcessingController.cpp \
+    CaptureThread.cpp \
+    CameraView.cpp
 HEADERS += mainwindow.h \
     Pixel.h \
     LatLon.h \
-    Camera.h
+    Camera.h \
+    RenderArea.h \
+    ProcessingController.h \
+    CaptureThread.h \
+    CameraView.h
 FORMS += mainwindow.ui

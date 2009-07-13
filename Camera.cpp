@@ -42,9 +42,32 @@ int Camera::grabFrame()
 	return cvGrabFrame(capture);
 }
 
-IplImage* Camera::retrieveFrame()
+QImage* Camera::retrieveFrame()
 {
-	return cvRetrieveFrame(capture);
+    IplImage* image = cvRetrieveFrame(capture);
+    int width = image->width;
+    int height = image->height;
+    int pixels = width * height;
+    uchar* imageData = new unsigned char[4 * pixels];
+    for(int i = 0; i < pixels; i++)
+    {
+        imageData[i * 4 + 3] = 0xFF; // alpha channel
+    }
+
+    uchar* src = (uchar*)(image->imageData);
+    uchar* srcEnd = src + (3 * pixels);
+    uchar* dest = imageData;
+
+    do
+    {
+        memcpy(dest, src, 3);
+        dest += 4;
+        src += 3;
+    }
+    while(src < srcEnd);
+
+    QImage* result = new QImage(imageData, width, height, QImage::Format_RGB32);
+    return result;
 }
 
 Pixel Camera::inViewLatLon(LatLon latlon)

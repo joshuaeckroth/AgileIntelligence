@@ -14,10 +14,12 @@ public:
 
 protected:
     void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
 
 private:
     QString id;
     QImage* frame;
+    bool cameraIdsDrawn;
 };
 
 #endif // CAMERAVIEW_H

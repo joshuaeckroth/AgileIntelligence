@@ -8,6 +8,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include <QImage>
 #include <highgui.h>
 #include <cv.h>
 #include "Pixel.h"
@@ -21,7 +22,7 @@ public:
 	virtual ~Camera();
 
 	int grabFrame();
-	IplImage* retrieveFrame();
+    QImage* retrieveFrame();
 
 	Pixel inViewLatLon(LatLon latlon);
 
