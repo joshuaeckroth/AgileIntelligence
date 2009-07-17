@@ -20,7 +20,11 @@ SOURCES += main.cpp \
     CaptureThread.cpp \
     CameraView.cpp \
     AreaOfInterest.cpp \
-    AreaOfInterestReader.cpp
+    AreaOfInterestReader.cpp \
+    Hypothesis.cpp \
+    Query1.cpp \
+    State.cpp \
+    HypothesisObjectInMotion.cpp
 HEADERS += mainwindow.h \
     Pixel.h \
     LatLon.h \
@@ -30,5 +34,9 @@ HEADERS += mainwindow.h \
     CaptureThread.h \
     CameraView.h \
     AreaOfInterest.h \
-    AreaOfInterestReader.h
+    AreaOfInterestReader.h \
+    Hypothesis.h \
+    Query1.h \
+    State.h \
+    HypothesisObjectInMotion.h
 FORMS += mainwindow.ui
