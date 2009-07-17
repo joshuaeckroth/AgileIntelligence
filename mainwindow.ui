@@ -53,6 +53,46 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="loadAois">
+         <property name="text">
+          <string>Load Areas of Interest</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>images/aoi-open.png</normaloff>images/aoi-open.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="clearAois">
+         <property name="text">
+          <string>Clear Areas of Interest</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>images/aoi-clear.png</normaloff>images/aoi-clear.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

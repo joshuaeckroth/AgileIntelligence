@@ -9,10 +9,12 @@
 #define CAMERA_H_
 
 #include <QImage>
+#include <QPolygon>
 #include <highgui.h>
 #include <cv.h>
 #include "Pixel.h"
 #include "LatLon.h"
+#include "AreaOfInterest.h"
 
 class Camera
 {
@@ -25,6 +27,7 @@ public:
     QImage* retrieveFrame();
 
 	Pixel inViewLatLon(LatLon latlon);
+    QPolygon translateAreaOfInterest(AreaOfInterest aoi);
 
 private:
 	CvCapture* capture;
@@ -36,6 +39,7 @@ private:
 
 	void loadHomography(const char* homographyFile, const char* inverseFile);
 	void getCameraProperties();
+    Pixel translateLatLon(LatLon latlon);
 };
 
 #endif /* CAMERA_H_ */

@@ -20,6 +20,13 @@ void CaptureThread::run()
             captureLock.unlock();
         }
 
+        if(!doNextCapture)
+        {
+            doNextCaptureLock.lock();
+            doNextCaptureWait.wait(&doNextCaptureLock);
+            doNextCaptureLock.unlock();
+        }
+
         for(int camera = 0; camera < numCameras; ++camera)
         {
             cameras[camera]->grabFrame();
@@ -33,14 +40,23 @@ void CaptureThread::run()
         frameNumber++;
         frameTime = frameNumber / fps;
 
+        doNextCapture = false;
+
         emit newFrames(frames, frameNumber, frameTime);
     }
+}
+
+void CaptureThread::nextCapture()
+{
+    doNextCapture = true;
+    doNextCaptureWait.wakeAll();
 }
 
 bool CaptureThread::startCapture()
 {
     if(!captureActive)
     {
+        nextCapture();
         captureActive = true;
         captureWait.wakeAll();
         return true;

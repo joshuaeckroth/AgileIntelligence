@@ -12,6 +12,8 @@ RenderArea::RenderArea(QWidget* parent,
   setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                             QSizePolicy::MinimumExpanding));
 
+  aois = new std::vector<QPolygon>[numCameras];
+
   cameraViews = new CameraView*[numCameras];
 
   QGridLayout *layout = new QGridLayout;
@@ -31,4 +33,19 @@ RenderArea::RenderArea(QWidget* parent,
 void RenderArea::renderFrame(int camera, QImage* frame)
 {
     cameraViews[camera]->updateFrame(frame);
+}
+
+void RenderArea::addAreaOfInterest(int camera, QPolygon polygon)
+{
+    aois[camera].push_back(polygon);
+    cameraViews[camera]->setAois(aois[camera]);
+}
+
+void RenderArea::clearAreasOfInterest()
+{
+    for(int camera = 0; camera < numCameras; ++camera)
+    {
+        aois[camera].clear();
+        cameraViews[camera]->setAois(aois[camera]);
+    }
 }

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "RenderArea.h"
 #include "ProcessingController.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(int numCameras, int gridX, int gridY, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -15,6 +16,8 @@ MainWindow::MainWindow(int numCameras, int gridX, int gridY, QWidget *parent)
 
     connect(ui->actionStart, SIGNAL(clicked()), this, SLOT(startProcessing()));
     connect(ui->actionStop, SIGNAL(clicked()), this, SLOT(stopProcessing()));
+    connect(ui->loadAois, SIGNAL(clicked()), this, SLOT(loadAois()));
+    connect(ui->clearAois, SIGNAL(clicked()), this, SLOT(clearAois()));
 
     connect(processingController, SIGNAL(statusChange(bool, int, double)),
             this, SLOT(statusChange(bool, int, double)));
@@ -30,16 +33,31 @@ MainWindow::~MainWindow()
 
 void MainWindow::startProcessing()
 {
-  processingController->startProcessing();
-  ui->actionStart->setEnabled(false);
-  ui->actionStop->setEnabled(true);
+    processingController->startProcessing();
+    ui->actionStart->setEnabled(false);
+    ui->actionStop->setEnabled(true);
 }
 
 void MainWindow::stopProcessing()
 {
-  processingController->stopProcessing();
-  ui->actionStart->setEnabled(true);
-  ui->actionStop->setEnabled(false);
+    processingController->stopProcessing();
+    ui->actionStart->setEnabled(true);
+    ui->actionStop->setEnabled(false);
+}
+
+void MainWindow::loadAois()
+{
+    QString aoiFile = QFileDialog::getOpenFileName(this, "Load Areas of Interest",
+                                                   "/home/josh", "ESRI Shapefiles (*.shp)");
+    if(!aoiFile.isNull())
+    {
+        processingController->loadAois(aoiFile);
+    }
+}
+
+void MainWindow::clearAois()
+{
+    processingController->clearAois();
 }
 
 void MainWindow::statusChange(bool capturing, int frameNumber, double frameTime)

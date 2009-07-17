@@ -2,6 +2,10 @@
 #include "RenderArea.h"
 #include "Camera.h"
 #include "CaptureThread.h"
+#include "AreaOfInterestReader.h"
+#include "AreaOfInterest.h"
+#include <vector>
+#include <QDebug>
 
 ProcessingController::ProcessingController(RenderArea* _renderArea,
                                            int _numCameras)
@@ -24,6 +28,25 @@ ProcessingController::ProcessingController(RenderArea* _renderArea,
     captureThread = new CaptureThread(numCameras, cameras, 10.0 /* fps */);
     connect(captureThread, SIGNAL(newFrames(QImage**, int, double)),
             this, SLOT(processNewFrames(QImage**, int, double)));
+    connect(this, SIGNAL(nextCapture()), captureThread, SLOT(nextCapture()));
+}
+
+void ProcessingController::loadAois(QString aoiFile)
+{
+    std::vector<AreaOfInterest> aois = AreaOfInterestReader::loadAois(aoiFile);
+    for(std::vector<AreaOfInterest>::iterator it = aois.begin(); it != aois.end(); ++it)
+    {
+        for(int camera = 0; camera < numCameras; camera++)
+        {
+            QPolygon translated = cameras[camera]->translateAreaOfInterest(*it);
+            renderArea->addAreaOfInterest(camera, translated);
+        }
+    }
+}
+
+void ProcessingController::clearAois()
+{
+    renderArea->clearAreasOfInterest();
 }
 
 void ProcessingController::startProcessing()
@@ -47,6 +70,8 @@ void ProcessingController::processNewFrames(QImage** frames,
     }
 
     emit statusChange(captureThread->isCapturing(), frameNumber, frameTime);
+
+    emit nextCapture();
 }
 
 ProcessingController::~ProcessingController()

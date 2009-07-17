@@ -72,23 +72,26 @@ QImage* Camera::retrieveFrame()
 
 Pixel Camera::inViewLatLon(LatLon latlon)
 {
-	CvMat* latlonHomogeneous = cvCreateMat(3, 1, CV_32FC1);
-	cvmSet(latlonHomogeneous, 0, 0, latlon.getLat());
-	cvmSet(latlonHomogeneous, 1, 0, latlon.getLon());
-	cvmSet(latlonHomogeneous, 2, 0, 1.0);
-
-	CvMat* pixelHomogeneous = cvCreateMat(3, 1, CV_32FC1);
-
-	cvMatMul(inverse, latlonHomogeneous, pixelHomogeneous);
-
-	int x = (int)(cvmGet(pixelHomogeneous, 0, 0) / cvmGet(pixelHomogeneous, 2, 0));
-	int y = (int)(cvmGet(pixelHomogeneous, 1, 0) / cvmGet(pixelHomogeneous, 2, 0));
-	Pixel pixel(x, y);
-	if(x < 0 || x > cameraWidth || y < 0 || y > cameraHeight)
+    Pixel pixel = translateLatLon(latlon);
+    if(pixel.getX() < 0 || pixel.getX() > cameraWidth
+       || pixel.getY() < 0 || pixel.getY() > cameraHeight)
 	{
 		pixel.setValid(false);
 	}
 	return pixel;
+}
+
+QPolygon Camera::translateAreaOfInterest(AreaOfInterest aoi)
+{
+    QPolygon polygon(aoi.numberOfPoints());
+    int index = 0;
+    for(LatLon latlon = aoi.begin(); !aoi.end(); latlon = aoi.next(), ++index)
+    {
+        Pixel pixel = translateLatLon(latlon);
+        polygon.setPoint(index, pixel.getX(), pixel.getY());
+    }
+
+    return polygon;
 }
 
 void Camera::loadHomography(const char* homographyFile,
@@ -109,4 +112,21 @@ void Camera::getCameraProperties()
 	cameraWidth = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH);
 	cameraHeight = cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT);
 	cameraFPS = cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+}
+
+Pixel Camera::translateLatLon(LatLon latlon)
+{
+    CvMat* latlonHomogeneous = cvCreateMat(3, 1, CV_32FC1);
+    cvmSet(latlonHomogeneous, 0, 0, latlon.getLat());
+    cvmSet(latlonHomogeneous, 1, 0, latlon.getLon());
+    cvmSet(latlonHomogeneous, 2, 0, 1.0);
+
+    CvMat* pixelHomogeneous = cvCreateMat(3, 1, CV_32FC1);
+
+    cvMatMul(inverse, latlonHomogeneous, pixelHomogeneous);
+
+    int x = (int)(cvmGet(pixelHomogeneous, 0, 0) / cvmGet(pixelHomogeneous, 2, 0));
+    int y = (int)(cvmGet(pixelHomogeneous, 1, 0) / cvmGet(pixelHomogeneous, 2, 0));
+    Pixel pixel(x, y);
+    return pixel;
 }

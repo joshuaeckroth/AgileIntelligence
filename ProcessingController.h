@@ -2,6 +2,7 @@
 #define PROCESSINGCONTROLLER_H
 
 #include <QObject>
+#include <QString>
 
 class RenderArea;
 class CaptureThread;
@@ -14,9 +15,12 @@ class ProcessingController : public QObject
 public:
     ProcessingController(RenderArea* _renderArea, int _numCameras);
     ~ProcessingController();
+    void loadAois(QString aoiFile);
+    void clearAois();
 
 signals:
     void statusChange(bool, int, double);
+    void nextCapture();
 
 public slots:
     void startProcessing();

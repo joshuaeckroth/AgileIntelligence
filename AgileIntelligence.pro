@@ -8,7 +8,8 @@ LIBS += -L/home/josh/bin/installations/opencv/lib \
     -lcv \
     -lcxcore \
     -lcvaux \
-    -lhighgui
+    -lhighgui \
+    -lgdal1.5.0
 SOURCES += main.cpp \
     mainwindow.cpp \
     Pixel.cpp \
@@ -17,7 +18,9 @@ SOURCES += main.cpp \
     RenderArea.cpp \
     ProcessingController.cpp \
     CaptureThread.cpp \
-    CameraView.cpp
+    CameraView.cpp \
+    AreaOfInterest.cpp \
+    AreaOfInterestReader.cpp
 HEADERS += mainwindow.h \
     Pixel.h \
     LatLon.h \
@@ -25,5 +28,7 @@ HEADERS += mainwindow.h \
     RenderArea.h \
     ProcessingController.h \
     CaptureThread.h \
-    CameraView.h
+    CameraView.h \
+    AreaOfInterest.h \
+    AreaOfInterestReader.h
 FORMS += mainwindow.ui

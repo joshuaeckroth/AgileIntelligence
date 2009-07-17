@@ -21,6 +21,8 @@ public:
 private slots:
     void startProcessing();
     void stopProcessing();
+    void loadAois();
+    void clearAois();
     void statusChange(bool, int, double);
 
 private:

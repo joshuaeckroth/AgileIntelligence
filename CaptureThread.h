@@ -22,10 +22,16 @@ public:
 signals:
     void newFrames(QImage**, int, double);
 
+public slots:
+    void nextCapture();
+
 private:
     QMutex captureLock;
     QWaitCondition captureWait;
     bool captureActive;
+    QMutex doNextCaptureLock;
+    QWaitCondition doNextCaptureWait;
+    bool doNextCapture;
     int numCameras;
     Camera** cameras;
     double fps;
