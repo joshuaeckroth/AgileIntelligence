@@ -18,9 +18,9 @@ RenderArea::RenderArea(QWidget* parent,
 
   QGridLayout *layout = new QGridLayout;
   int camera = 0;
-  for(int x = 0; x < gridX; ++x)
+  for(int y = 0; y < gridY; ++y)
   {
-      for(int y = 0; y < gridY; ++y)
+      for(int x = 0; x < gridX; ++x)
       {
           cameraViews[camera] = new CameraView(this, QString("Camera %1").arg(camera + 1));
           layout->addWidget(cameraViews[camera], y, x);
